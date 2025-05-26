@@ -1,1 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Histórico de Transações</h2>
+<a href="/add">Adicionar nova transação</a> | <a href="/logout">Sair</a>
+
+{% if transactions %}
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Valor</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for t in transactions %}
+        <tr>
+            <td>{{ t['type'] }}</td>
+            <td>{{ t['category'] }}</td>
+            <td>{{ "%.2f"|format(t['amount']) }}</td>
+            <td>{{ t['date'] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Nenhuma transação encontrada.</p>
+{% endif %}
+{% endblock %}
 
