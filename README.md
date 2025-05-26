@@ -27,7 +27,6 @@ Este projeto é o trabalho final do curso **CS50x – Introduction to Computer S
   - `layout.html` – Layout base de todas as páginas.
   - `register.html` – Página de cadastro.
   - `login.html` – Página de login.
-  - `dashboard.html` – Painel inicial com resumo financeiro.
   - `add.html` – Formulário de nova transação.
   - `history.html` – Histórico completo de transações.
   - `report.html` – Relatório mensal com gráficos.
