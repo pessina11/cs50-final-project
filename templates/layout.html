@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Finance App</title>
+
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Finance App</h1>
+
+    <nav>
+        {% if session.user_id %}
+            <a href="/history">Histórico</a> |
+            <a href="/add">Adicionar</a> |
+            <a href="/report">Relatório</a> |
+            <a href="/logout">Sair</a>
+        {% else %}
+            <a href="/login">Login</a> |
+            <a href="/register">Registrar</a>
+        {% endif %}
+    </nav>
+
+    <!-- Mensagens flash -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>
+
 
