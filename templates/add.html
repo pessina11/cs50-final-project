@@ -1,1 +1,37 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Adicionar Transação</h2>
+<form action="/add" method="post">
+    <label>
+        Tipo:
+        <select name="type" required>
+            <option value="income">Receita</option>
+            <option value="expense">Despesa</option>
+        </select>
+    </label>
+    <br><br>
+
+    <label>
+        Categoria:
+        <input type="text" name="category" placeholder="Ex: Alimentação, Salário" required>
+    </label>
+    <br><br>
+
+    <label>
+        Valor:
+        <input type="number" step="0.01" name="amount" placeholder="Ex: 100.00" required>
+    </label>
+    <br><br>
+
+    <label>
+        Data:
+        <input type="date" name="date" required>
+    </label>
+    <br><br>
+
+    <button type="submit">Adicionar</button>
+</form>
+<a href="/history">Voltar ao histórico</a>
+{% endblock %}
 
