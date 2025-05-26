@@ -1,1 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Relatório Mensal</h2>
+<a href="/history">Histórico</a> | <a href="/logout">Sair</a>
+
+{% if report %}
+    {% for month, types in report.items() %}
+        <h3>Mês: {{ month }}</h3>
+
+        <h4>Receitas</h4>
+        {% if types.income %}
+            <ul>
+            {% for cat, total in types.income.items() %}
+                <li>{{ cat }}: R$ {{ "%.2f"|format(total) }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Sem receitas.</p>
+        {% endif %}
+
+        <h4>Despesas</h4>
+        {% if types.expense %}
+            <ul>
+            {% for cat, total in types.expense.items() %}
+                <li>{{ cat }}: R$ {{ "%.2f"|format(total) }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Sem despesas.</p>
+        {% endif %}
+        <hr>
+    {% endfor %}
+
+    <!-- Gráficos -->
+    <h3>Gráfico de Receitas</h3>
+    <canvas id="incomeChart" width="600" height="300"></canvas>
+
+    <h3>Gráfico de Despesas</h3>
+    <canvas id="expenseChart" width="600" height="300"></canvas>
+
+{% else %}
+    <p>Nenhuma transação para gerar relatório.</p>
+{% endif %}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const reportData = {{ report | tojson }};
+
+function prepareChartData(type) {
+    const labels = Object.keys(reportData).sort();
+    const datasets = {};
+
+    labels.forEach(month => {
+        const categories = reportData[month][type];
+        for (const cat in categories) {
+            if (!datasets[cat]) datasets[cat] = [];
+        }
+    });
+
+    labels.forEach(month => {
+        const categories = reportData[month][type];
+        for (const cat in datasets) {
+            datasets[cat].push(categories[cat] || 0);
+        }
+    });
+
+    return { labels, datasets };
+}
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function createChart(ctxId, type) {
+    const ctx = document.getElementById(ctxId).getContext('2d');
+    const { labels, datasets } = prepareChartData(type);
+
+    const chartDatasets = Object.entries(datasets).map(([label, data]) => ({
+        label,
+        data,
+        backgroundColor: getRandomColor(),
+    }));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: chartDatasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+createChart('incomeChart', 'income');
+createChart('expenseChart', 'expense');
+</script>
+{% endblock %}
+
 
